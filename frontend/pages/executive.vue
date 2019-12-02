@@ -4,7 +4,7 @@
       <span class="display-3">エグゼクティブになった!</span>
       <hr />
       <v-card-actions class="justify-center">
-        <span>{{ executive.title }}</span>
+        <span>{{ executive.username }}</span>
       </v-card-actions>
     </div>
   </v-layout>
@@ -13,14 +13,13 @@
 <script>
 export default {
   async asyncData(ctx) {
-    /*
     return {
-        executive: await ctx.app.$executiveRepository.index()
-    } */
+      executive: await ctx.app.$executiveRepository.get(1)
+    };
   },
   data() {
     return {
-      executive: { title: "huga" }
+      executive: {}
     };
   },
   methods: {
