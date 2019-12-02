@@ -1,7 +1,7 @@
 import colors from "vuetify/es5/util/colors";
 
 export default {
-  mode: "universal",
+  mode: "spa",
   /*
    ** Headers of the page
    */
@@ -30,7 +30,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/repository'],
+  plugins: ["~/plugins/repository"],
   /*
    ** Nuxt.js dev-modules
    */
@@ -44,14 +44,18 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    "@nuxtjs/axios"
+    "@nuxtjs/axios",
+    "@nuxtjs/proxy"
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: process.env.BASE_URL || "http://localhost:8000",
+    proxy: true
+  },
+  proxy: {
+    "/api/": process.env.BASE_URL || "http://localhost:8000"
   },
   /*
    ** vuetify module configuration

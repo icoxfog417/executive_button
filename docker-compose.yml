@@ -1,0 +1,27 @@
+version: "3"
+services:
+
+  backend:
+    build: ./backend
+    ports:
+      - 8000:8000
+    command: ["/backend/scripts/run.sh"]
+    volumes:
+      - ./backend:/app
+    environment:
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "password"
+      ADMIN_EMAIL: "admin@example.com"
+    tty: true
+    stdin_open: true
+
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 3000:3000
+    command: /bin/sh -c "npm run dev"
+    tty: true
+    depends_on:
+      - backend

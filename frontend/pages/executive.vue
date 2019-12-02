@@ -14,7 +14,12 @@
 export default {
   async asyncData(ctx) {
     return {
-      executive: await ctx.app.$executiveRepository.get(1)
+      executive: await ctx.app.$executiveRepository.get(1).catch(error => {
+        console.log(error);
+        return {
+          executive: {}
+        };
+      })
     };
   },
   data() {
