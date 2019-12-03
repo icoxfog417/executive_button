@@ -52,10 +52,12 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    proxy: true
+    prefix: "/api",
+    proxy: true,
+    debug: true
   },
   proxy: {
-    "/api/": process.env.BASE_URL || "http://localhost:8000"
+    "/api/": process.env.BACKEND_URL || "http://localhost:8000/"
   },
   /*
    ** vuetify module configuration

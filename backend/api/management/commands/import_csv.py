@@ -15,7 +15,9 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        if "file_path" in options:
+        file_path = options.get("file_path")
+        if not file_path:
+            raise CommandError("You have to specify file_path")
             if options["refresh"]:
                 Remuneration.objects.all().delete()
 

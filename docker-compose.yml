@@ -1,19 +1,38 @@
 version: "3"
 services:
 
+  reverseproxy:  # see https://docs.traefik.io/#the-traefik-quickstart-using-docker
+    image: traefik:v2.0
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   backend:
     build: ./backend
     ports:
       - 8000:8000
+    expose:
+      - 8000
     command: ["/backend/scripts/run.sh"]
     volumes:
       - ./backend:/app
     environment:
-      ADMIN_USERNAME: "admin"
+      ADMIN_USERNAME: "administrator"
       ADMIN_PASSWORD: "password"
       ADMIN_EMAIL: "admin@example.com"
     tty: true
     stdin_open: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`backend`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=web"
 
   frontend:
     build: ./frontend
@@ -21,7 +40,17 @@ services:
       - ./frontend:/app
     ports:
       - 3000:3000
+    expose:
+      - 3000
     command: /bin/sh -c "npm run dev"
+    environment:
+      BACKEND_URL: "http://backend:8000/"
+      API_URL_BROWSER: "/api"
+      BACKEND_HOST: "backend"
     tty: true
     depends_on:
       - backend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`frontend`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
