@@ -18,25 +18,25 @@ class Command(BaseCommand):
         file_path = options.get("file_path")
         if not file_path:
             raise CommandError("You have to specify file_path")
-            if options["refresh"]:
-                Remuneration.objects.all().delete()
+        if options["refresh"]:
+            Remuneration.objects.all().delete()
 
-            models = []
-            with open(options["file_path"], "r", encoding="utf-8") as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    m = Remuneration(
-                        edinet_code=row["edinet_code"],
-                        sec_code=row["sec_code"],
-                        filer_name=row["filer_name"],
-                        doc_description=row["doc_description"],
-                        doc_id=row["doc_id"],
-                        period_start=row["period_start"],
-                        period_end=row["period_end"],
-                        amount=int(row["amount"]),
-                        number=int(row["number"])
-                    )
-                    models.append(m)
+        models = []
+        with open(options["file_path"], "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                m = Remuneration(
+                    edinet_code=row["edinet_code"],
+                    sec_code=row["sec_code"],
+                    filer_name=row["filer_name"],
+                    doc_description=row["doc_description"],
+                    doc_id=row["doc_id"],
+                    period_start=row["period_start"],
+                    period_end=row["period_end"],
+                    amount=int(row["amount"]),
+                    number=int(row["number"])
+                )
+                models.append(m)
 
-            Remuneration.objects.bulk_create(models)
-            self.stdout.write(self.style.SUCCESS(f"Successfully import {len(models)} remuneration"))
+        Remuneration.objects.bulk_create(models)
+        self.stdout.write(self.style.SUCCESS(f"Successfully import {len(models)} remuneration"))

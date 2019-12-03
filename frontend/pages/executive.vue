@@ -1,11 +1,18 @@
 <template>
   <v-layout column justify-center align-center>
     <div class="text-center">
-      <span class="display-3">エグゼクティブになった!</span>
+      <div class="display-3">エグゼクティブになった!</div>
       <hr />
-      <v-card-actions class="justify-center">
-        <span>{{ executive.username }}</span>
-      </v-card-actions>
+      <br />
+      <v-card class="mx-auto" max-width="400">
+        <v-img src="/after.png"></v-img>
+        <v-card-title>
+          {{ executive.filer_name }}
+        </v-card-title>
+        <v-card-subtitle class="pb-0">
+          {{ executive.edinet_code }}
+        </v-card-subtitle>
+      </v-card>
     </div>
   </v-layout>
 </template>
