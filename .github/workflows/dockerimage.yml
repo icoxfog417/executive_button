@@ -1,0 +1,22 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build the Docker images
+    - uses: actions/checkout@v1
+    - run: |
+        docker-compose build --force-rm .
+        docker tag executive_button_backend icoxfog417/executive_button_backend
+        docker tag executive_button_frontend icoxfog417/executive_button_frontend
+        docker push icoxfog417/executive_button_backend:latest
+        docker push icoxfog417/executive_button_frontend:latest
