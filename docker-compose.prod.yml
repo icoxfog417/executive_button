@@ -20,7 +20,7 @@ services:
     expose:
       - 8000
     volumes:
-      - app:/backend
+      - static_volume:/backend
     command: ["/backend/scripts/run.sh"]
     environment:
       ADMIN_USERNAME: "administrator"
@@ -36,7 +36,7 @@ services:
   frontend:
     image: icoxfog417/executive_button_frontend:latest
     volumes:
-      - app:/frontend
+      - static_volume:/frontend
     ports:
       - 3000:3000
     expose:
@@ -55,4 +55,4 @@ services:
       - "traefik.http.routers.frontend.entrypoints=web"
 
 volumes: 
-  app:
+  static_volume:
