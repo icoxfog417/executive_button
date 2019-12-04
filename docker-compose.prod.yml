@@ -10,18 +10,28 @@ services:
     ports:
       - "80:80"
       - "8080:8080"
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /ecs/executive_button
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: reverseproxy
     volumes:
-      - /var/run/docker.sock
-
+      - /var/run/docker.sock:/var/run/docker.sock
+    
   backend:
     image: icoxfog417/executive_button_backend:latest
     ports:
       - 8000:8000
+    logging:
+      driver: awslogs  
+      options: 
+        awslogs-group: /ecs/executive_button
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: backend
     expose:
       - 8000
-    volumes:
-      - static_volume:/backend
-    command: ["/backend/scripts/run.sh"]
+    command: ["scripts/run.sh"]
     environment:
       ADMIN_USERNAME: "administrator"
       ADMIN_PASSWORD: "password"
@@ -35,10 +45,14 @@ services:
 
   frontend:
     image: icoxfog417/executive_button_frontend:latest
-    volumes:
-      - static_volume:/frontend
     ports:
       - 3000:3000
+    logging:
+      driver: awslogs  
+      options: 
+        awslogs-group: /ecs/executive_button
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: frontend
     expose:
       - 3000
     command: /bin/sh -c "npm start"
@@ -53,6 +67,3 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`frontend`)"
       - "traefik.http.routers.frontend.entrypoints=web"
-
-volumes: 
-  static_volume:
