@@ -4,7 +4,6 @@ services:
   reverseproxy:  # see https://docs.traefik.io/#the-traefik-quickstart-using-docker
     image: traefik:v2.0
     command:
-      - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
@@ -12,17 +11,17 @@ services:
       - "80:80"
       - "8080:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock
 
   backend:
-    build: ./backend
+    image: icoxfog417/executive_button_backend:latest
     ports:
       - 8000:8000
     expose:
       - 8000
-    command: ["/backend/scripts/run.sh"]
     volumes:
-      - ./backend:/backend
+      - app:/backend
+    command: ["/backend/scripts/run.sh"]
     environment:
       ADMIN_USERNAME: "administrator"
       ADMIN_PASSWORD: "password"
@@ -35,14 +34,14 @@ services:
       - "traefik.http.routers.backend.entrypoints=web"
 
   frontend:
-    build: ./frontend
+    image: icoxfog417/executive_button_frontend:latest
     volumes:
-      - ./frontend:/frontend
+      - app:/frontend
     ports:
       - 3000:3000
     expose:
       - 3000
-    command: /bin/sh -c "npm run dev"
+    command: /bin/sh -c "npm start"
     environment:
       BACKEND_URL: "http://backend:8000/"
       API_URL_BROWSER: "/api"
@@ -54,3 +53,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`frontend`)"
       - "traefik.http.routers.frontend.entrypoints=web"
+
+volumes: 
+  app:
