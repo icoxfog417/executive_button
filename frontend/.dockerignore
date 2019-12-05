@@ -1,0 +1,7 @@
+**/bundle/
+**/node_modules/
+**/webpack-stats.json
+
+**/.nuxt
+**/.env
+**/coverage/

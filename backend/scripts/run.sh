@@ -17,5 +17,7 @@ if [[ -n "${ADMIN_USERNAME}" ]] && [[ -n "${ADMIN_PASSWORD}" ]] && [[ -n "${ADMI
   || true
 fi
 
+python manage.py import_csv ./remunerations.csv
+
 echo "Starting django"
 gunicorn --bind 0.0.0.0:8000 backend.wsgi --timeout 300
