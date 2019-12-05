@@ -29,6 +29,6 @@ jobs:
         docker push icoxfog417/executive_button_frontend:latest
 
     - name: Build proxy Docker images
-        run: |
-        docker build -f nginx/Dockerfile -t icoxfog417/executive_button_proxy:latest .
-        docker push icoxfog417/executive_button_proxy:latest
+      run: |
+      docker build -f nginx/Dockerfile -t icoxfog417/executive_button_proxy:latest .
+      docker push icoxfog417/executive_button_proxy:latest
