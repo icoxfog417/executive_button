@@ -18,3 +18,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # copy project
 COPY . /backend/
+RUN chmod +x /backend/scripts/run.sh
