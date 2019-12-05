@@ -2,14 +2,17 @@ version: "3"
 services:
 
   reverseproxy:  # see https://docs.traefik.io/#the-traefik-quickstart-using-docker
-    build: ./nginx
+    image: traefik:v2.0
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
-    depends_on:
-      - backend
-    networks:
-      - network-frontend
-      - default
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   backend:
     build: ./backend
@@ -43,6 +46,7 @@ services:
     environment:
       BACKEND_URL: "http://backend:8000/"
       API_URL_BROWSER: "/api"
+      BACKEND_HOST: "backend"
     tty: true
     depends_on:
       - backend
@@ -50,6 +54,3 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`frontend`)"
       - "traefik.http.routers.frontend.entrypoints=web"
-
-networks:
-  network-frontend:
