@@ -23,7 +23,9 @@ jobs:
     - name: Build the Docker images
       run: |
         docker-compose build --force-rm
+        docker build -f nginx/Dockerfile -t icoxfog417/executive_button_proxy:latest .
         docker tag executive_button_backend icoxfog417/executive_button_backend
         docker tag executive_button_frontend icoxfog417/executive_button_frontend
         docker push icoxfog417/executive_button_backend:latest
         docker push icoxfog417/executive_button_frontend:latest
+        docker push icoxfog417/executive_button_proxy:latest
