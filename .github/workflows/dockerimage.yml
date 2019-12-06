@@ -12,8 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+    - name: Install ecs-cli
+      run: |
+        sudo curl -o /usr/local/bin/ecs-cli https://amazon-ecs-cli.s3.amazonaws.com/ecs-cli-linux-amd64-latest
+        ecs-cli configure profile --profile-name default --access-key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret-key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        ecs-cli configure --cluster executive_button --default-launch-type FARGATE --region ap-northeast-1 --config-name default
 
     - name: Login to Docker Hub
       env:
@@ -32,3 +35,11 @@ jobs:
       run: |
         docker build -f nginx/Dockerfile -t icoxfog417/executive_button_proxy:latest .
         docker push icoxfog417/executive_button_proxy:latest
+
+    - name: Deploy to ESC
+      run: |
+      ecs-cli compose --file docker-compose.prod.yml --project-name executive_button service up --create-log-groups --cluster-config executive_button --ecs-profile default
+
+    - name: Monitor to ESC
+      run: |
+      ecs-cli compose --file docker-compose.prod.yml --project-name executive_button service ps --create-log-groups --cluster-config executive_button --ecs-profile default
