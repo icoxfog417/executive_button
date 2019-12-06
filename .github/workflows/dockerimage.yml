@@ -41,7 +41,7 @@ jobs:
         docker push icoxfog417/executive_button_proxy:latest
 
     - name: Deploy to ESC
-      run: ecs-cli compose --file docker-compose.prod.yml --project-name executive_button service up --create-log-groups --private-dns-namespace executive.button.com --enable-service-discovery --cluster-config executive_button --ecs-profile default
+      run: ecs-cli compose --file docker-compose.prod.yml --project-name executive_button service up --create-log-groups --cluster-config executive_button --ecs-profile default
 
     - name: Monitor to ESC
       run: ecs-cli compose --file docker-compose.prod.yml --project-name executive_button service ps --create-log-groups --cluster-config executive_button --ecs-profile default
